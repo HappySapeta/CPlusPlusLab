@@ -22,3 +22,9 @@ source_group(
 	PREFIX "Source Files"
 	FILES ${PROJECT_SOURCES}
 )
+
+if (MSVC)
+	target_compile_options(CPlusPlusLab PRIVATE /W4 /permissive-)
+else ()
+	target_compile_options(CPlusPlusLab PRIVATE -Wall -Wextra)
+endif ()
