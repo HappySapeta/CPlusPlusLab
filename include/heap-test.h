@@ -25,11 +25,6 @@ namespace tests::heap
 	
 		virtual void run() override
 		{
-			const auto heap_predicate = [](const some_struct& A, const some_struct& B) -> bool
-			{
-				return A.value > B.value;
-			};
-			
 			{
 				items_.push_back({1, "apple"});
 				items_.push_back({3, "banana"});
@@ -70,6 +65,11 @@ namespace tests::heap
 			{
 				std::print("{}\n", static_cast<std::string>(item));
 			}
+		}
+		
+		static bool heap_predicate(const some_struct& first_item, const some_struct& second_item)
+		{
+			return first_item.value > second_item.value;			
 		}
 	
 	private:
