@@ -25,28 +25,41 @@ namespace tests::heap
 	
 		virtual void run() override
 		{
-			const auto heap_push_predicate = [](const some_struct& A, const some_struct& B) -> bool
+			const auto heap_predicate = [](const some_struct& A, const some_struct& B) -> bool
 			{
 				return A.value > B.value;
 			};
 			
-			items_.push_back({1, "apple"});
-			items_.push_back({3, "banana"});
-			items_.push_back({2, "grapes"});
+			{
+				items_.push_back({1, "apple"});
+				items_.push_back({3, "banana"});
+				items_.push_back({2, "grapes"});
+				std::print("State of items_ after subsequent push backs without using heap_push:\n");
+				print_items();
+			}
 			
-			std::print("State of items_ after subsequent push backs without using heap_push:\n");
-			print_items();
+			{
+				some_struct mango_item{.value = 0, .name = "mango"};
+				std::print("Pushing {}.\n", static_cast<std::string>(mango_item));
+				items_.push_back({0, "mango"});
+				print_items();
+			}
 			
-			some_struct mango_item{.value = 0, .name = "mango"};
-			std::print("Pushing {}.\n", static_cast<std::string>(mango_item));
-			items_.push_back({0, "mango"});
-			print_items();
+			{
+				std::print("Performing heap_push.\n");
+				std::ranges::push_heap(items_, heap_predicate);
+				std::print("State of items_ after heap_push on \"mango\"\n");
+				print_items();
+			}
 			
-			std::print("Performing heap_push.\n");
-			std::ranges::push_heap(items_, heap_push_predicate);
-			
-			std::print("State of items_ after heap_push on \"mango\"\n");
-			print_items();
+			{
+				std::print("State of items_ after performing heap_pop twice:\n");
+				std::ranges::pop_heap(items_, heap_predicate);
+				items_.pop_back();
+				std::ranges::pop_heap(items_, heap_predicate);
+				items_.pop_back();
+				print_items();
+			}
 		}
 		
 	private:
